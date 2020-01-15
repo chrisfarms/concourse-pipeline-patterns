@@ -1,5 +1,5 @@
-ARG BASE_DIGEST=3
-FROM python:${BASE_DIGEST}
+ARG BASE_IMAGE="python:3"
+FROM ${BASE_IMAGE}
 
 RUN pip install flask flask_restful
 

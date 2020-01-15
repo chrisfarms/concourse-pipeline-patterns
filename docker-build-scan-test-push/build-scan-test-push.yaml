@@ -17,6 +17,7 @@ resources:
     branch: master
     paths:
     - app
+    - tasks
 
 # base is an input to our pipeline that represents a third-party base image that our image will be built on top of
 # in this case we are going to watch for new versions of the "python" base image

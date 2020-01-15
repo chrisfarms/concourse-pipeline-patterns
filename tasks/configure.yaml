@@ -2,6 +2,8 @@ platform: linux
 image_resource:
   type: registry-image
   source: {repository: alpine, tag: 3}
+params:
+  BASE_IMAGE_NAME: python
 inputs:
 - name: base
 outputs:
@@ -17,6 +19,7 @@ run:
     touch config/docker.args
     echo "BASE_DIGEST=$(cat base/digest)" >> config/docker.args
     echo "BASE_TAG=$(cat base/tag)" >> config/docker.args
+    echo "BASE_IMAGE=${BASE_IMAGE_NAME}@$(cat base/digest)" >> config/docker.args
     cat config/docker.args
     echo "OK"
 

@@ -23,7 +23,7 @@ resources:
 # in the 3.x.x series by following the "3" tag.
 - name: base
   type: registry-image
-  icon: docker-circle
+  icon: package-variant-closed
   source:
     repository: python
     tag: "3"
@@ -32,7 +32,7 @@ resources:
 # in this example we are using github packages to store our final built/tested application image
 - name: img
   type: registry-image
-  icon: docker-circle
+  icon: package-variant-closed
   source:
     repository: docker.pkg.github.com/chrisfarms/concourse-pipeline-patterns/app-py
     tag: latest

@@ -29,9 +29,9 @@ resources:
     repository: python
     tag: "3"
 
-# img is regsitry-image resource (a container image) that is used as our pipeline output
+# app is regsitry-image resource (a container image) that is used as our pipeline output
 # in this example we are using github packages to store our final built/tested application image
-- name: img
+- name: app
   type: registry-image
   icon: package-variant-closed
   source:
@@ -65,6 +65,6 @@ jobs:
     file: src/tasks/test.yaml
   - task: scan                          # do some due diligence and check your image for vuln matches
     file: src/tasks/scan.yaml
-  - put: img                            # and finally push your image to
+  - put: app                            # and finally push your image to
     params: {image: image/image.tar}
 

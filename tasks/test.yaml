@@ -10,7 +10,7 @@ run:
   - -eu
   - -c
   - |
-    echo "running tests..."
-    echo "NOTIMPLEMNTEDYET
+    echo "executing tests..."
+    
 
 

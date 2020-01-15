@@ -11,6 +11,5 @@ run:
   - -c
   - |
     echo "scanning image against vulnerability database..."
-    echo "NOTIMPLEMNTEDYET
 
 

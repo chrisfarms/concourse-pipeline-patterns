@@ -1,0 +1,14 @@
+platform: linux
+image_resource:
+  type: registry-image
+  source: {repository: vito/oci-build-task}
+params:
+  CONTEXT: src
+  BUILD_ARGS_FILE: config/docker.args
+inputs:
+- name: src
+- name: config
+outputs:
+- name: image
+run:
+  path: build

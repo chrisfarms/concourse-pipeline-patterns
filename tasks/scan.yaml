@@ -1,0 +1,16 @@
+platform: linux
+image_resource:
+  type: registry-image
+  source: {repository: alpine, tag: 3}
+inputs:
+- name: image
+run:
+  path: /bin/sh
+  args:
+  - -eu
+  - -c
+  - |
+    echo "scanning image against vulnerability database..."
+    echo "NOTIMPLEMNTEDYET
+
+

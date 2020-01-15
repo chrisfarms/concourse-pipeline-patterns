@@ -1,0 +1,22 @@
+platform: linux
+image_resource:
+  type: registry-image
+  source: {repository: alpine, tag: 3}
+inputs:
+- name: base
+outputs:
+- name: config
+run:
+  path: /bin/sh
+  args:
+  - -eu
+  - -c
+  - |
+    echo "generating docker buildargs file..."
+    mkdir -p config
+    touch config/docker.args
+    echo "BASE_DIGEST=$(cat base/digest)" >> config/docker.args
+    echo "BASE_TAG=$(cat base/tag)" >> config/docker.args
+    echo "OK"
+
+

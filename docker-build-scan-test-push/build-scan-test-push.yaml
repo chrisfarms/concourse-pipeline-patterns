@@ -1,0 +1,67 @@
+
+#############################################################################
+# resource are the inputs and outputs of our pipeline
+#############################################################################
+
+resources:
+
+# src is an input to our pipeline that represents our application's source code in a git repository
+# we will use this to "get" changes as they are merged into master.
+- name: src
+  type: git
+  icon: github-circle
+  source:
+    uri: https://github.com/alphagov/tech-ops.git
+    branch: master
+    paths:
+    - app
+
+# base is an input to our pipeline that represents a third-party base image that our image will be built on top of
+# in this case we are going to watch for new patch versions of the alpine image
+# in the 3.x.x series by following the "3" tag.
+- name: base
+  type: registry-image
+  icon: docker-circle
+  source:
+    repository: alpine
+    tag: "3"
+
+# img is regsitry-image resource (a container image) that is used as our pipeline output
+- name: img
+  type: registry-image
+  icon: docker-circle
+  source:
+    repository:
+    tag: latest
+
+#############################################################################
+# jobs define the order in which to run our tasks and when to trigger them
+#############################################################################
+
+jobs:
+
+# build is a job that watches for changes to either the application source code
+# or new versions of the alpine base image, builds a the application container
+# image, runs tests, scans the built image for vulnerabilities before finally
+# pushing the built image to an image repository
+- name: build
+  plan:
+  - get: src                            # trigger on changes to application source
+    trigger: true
+  - get: base                           # or when a new base image is released
+    trigger: true
+  - task: configure                     # generate build-args
+    file: src/tasks/configure.yaml
+  - task: build                         # then build your image
+    file: src/tasks/build.yaml
+    params:
+      CONTEXT: ./src/app
+      BUILD_ARGS_FILE: config/args
+    priviledged: true
+  - task: test                          # execute your tests against your built application artifact
+    file: src/tasks/test.yaml
+  - task: scan                          # do some due diligence and check your image for vuln matches
+    file: src/tasks/scan.yaml
+  - put: img                            # and finally push your image to
+    params: {image: image/image.tar}
+

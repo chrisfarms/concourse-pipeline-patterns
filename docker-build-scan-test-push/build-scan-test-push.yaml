@@ -59,10 +59,7 @@ jobs:
     file: src/tasks/configure.yaml
   - task: build                         # then build your image
     file: src/tasks/build.yaml
-    params:
-      CONTEXT: ./src/app
-      BUILD_ARGS_FILE: config/args
-    priviledged: true
+    privileged: true
   - task: test                          # execute your tests against your built application artifact
     file: src/tasks/test.yaml
   - task: scan                          # do some due diligence and check your image for vuln matches

@@ -6,33 +6,38 @@
 resources:
 
 # src is an input to our pipeline that represents our application's source code in a git repository
-# we will use this to "get" changes as they are merged into master.
+# we will use this to "get" changes to our application as they are merged into master.
+# in this example our application source is in the "./app" directory, so we use "paths" to only watch
+# for changes in this directory
 - name: src
   type: git
   icon: github-circle
   source:
-    uri: https://github.com/alphagov/tech-ops.git
+    uri: https://github.com/chrisfarms/concourse-pipeline-patterns.git
     branch: master
     paths:
     - app
 
 # base is an input to our pipeline that represents a third-party base image that our image will be built on top of
-# in this case we are going to watch for new patch versions of the alpine image
+# in this case we are going to watch for new versions of the "python" base image
 # in the 3.x.x series by following the "3" tag.
 - name: base
   type: registry-image
   icon: docker-circle
   source:
-    repository: alpine
+    repository: python
     tag: "3"
 
 # img is regsitry-image resource (a container image) that is used as our pipeline output
+# in this example we are using github packages to store our final built/tested application image
 - name: img
   type: registry-image
   icon: docker-circle
   source:
-    repository:
+    repository: docker.pkg.github.com/chrisfarms/concourse-pipeline-patterns/app-py
     tag: latest
+    username: chrisfarms
+    password: ((github-api-key))
 
 #############################################################################
 # jobs define the order in which to run our tasks and when to trigger them
@@ -41,7 +46,7 @@ resources:
 jobs:
 
 # build is a job that watches for changes to either the application source code
-# or new versions of the alpine base image, builds a the application container
+# or new versions of the python base image, builds a the application container
 # image, runs tests, scans the built image for vulnerabilities before finally
 # pushing the built image to an image repository
 - name: build
